@@ -1,0 +1,67 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
+  <script src="{% static 'js/node_modules/monaco-editor/min/vs/loader.js' %}"></script>
+  <!-- <script src="{% static 'js/hoge.js' %}"></script> -->
+</head>
+<body>
+    <h1>文字列の変換</h1>
+    <h3>文字列が複数渡されるので、うんちに変換して出力してください。</h3>
+    <h3>入力例: ['hoge', 'piyo']</h3>
+    <h3>期待する出力: 'うんち', 'うんち'</h3>
+    <div>
+      <span>
+        <label class="control-label">Languege</label>
+        <select class="theme-picker">
+          <option>JavaScript</option>
+        </select>
+      </span>
+      <span>
+        <label class="control-label">Theme</label>
+        <select class="theme-picker">
+          <option>Visual Studio</option>
+          <option>Visual Studio Dark</option>
+        </select>
+      </span>
+      <button id="answer">Answer!</button>
+    </div>
+  <div id="container" style="width:800px;height:600px;margin-top:50px;"></div>
+  <script>
+    let editor;
+    require.config({ paths: { 'vs': 'static/js/node_modules/monaco-editor/min/vs' }});
+    require(['vs/editor/editor.main'], function() {
+      editor = monaco.editor.create(document.getElementById('container'), {
+        value: [
+            '// 入力を受け取り、解答を出力して下さい。',
+            '// 入力 const input = codeMountain.getInput()',
+            '// 出力 console.log("解答です")',
+            '',
+            'function answer() {',
+            '\treturn "Hello world!";',
+            '}',
+            'answer()'
+        ].join('\n'),
+        language: 'javascript',
+        // readOnly: true,
+        theme: "vs"
+      });
+    });
+
+    $('#answer').click(function() {
+      const text = editor.getValue()
+      console.log(text)
+      const output = eval(text)  // 最後の評価が返される
+      console.log(output)
+    })
+    // $('button').click(function(){
+    //   monaco.editor.setTheme("vs-dark");
+    // });
+  </script>
+</body>
+</html>
