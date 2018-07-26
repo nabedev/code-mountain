@@ -5,19 +5,21 @@ services:
     build: .
     image: code-mountain
     container_name: code-mountain
-    command: python ./app/manage.py runserver 0.0.0.0:8000
+    command: python ./coder/manage.py runserver 0.0.0.0:8000
     ports:
       - 127.0.0.1:8000:8000
     volumes:
       - .:/var/www/app
-    # depends_on:
-    #   - code-mountain-postgres
+    depends_on:
+      - code-mountain-postgres
 
-  # code-mountain-postgres:
-  #   image: postgres:10-alpine
-  #   container_name: code-mountain-postgres
-  #   ports:
-  #     - 127.0.0.1:5432:5432
-  #   environment:
-  #     POSTGRES_USER: 'root'
-  #     POSTGRES_PASSWORD: 'password'
+  code-mountain-postgres:
+    image: postgres:10-alpine
+    container_name: code-mountain-postgres
+    volumes:
+      - .volumes/postgres:/var/lib/postgresql/data
+    ports:
+      - 127.0.0.1:5432:5432
+    environment:
+      POSTGRES_USER: 'root'
+      POSTGRES_PASSWORD: ''
